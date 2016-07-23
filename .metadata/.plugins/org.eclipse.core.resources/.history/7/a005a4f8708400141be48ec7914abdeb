@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core">
+		
+	<f:view>
+		<head>
+			<title>Eliminar dueño</title>
+		</head>
+
+		<body>
+			<h:form>
+				<h3>Elija al dueño que desea eliminar:</h3>
+				
+		        <h:selectOneMenu id="iterator" value="#{ownerBean.owner}" converter="omnifaces.SelectItemsConverter" >
+		            <f:selectItems value="#{ownerBean.listaOwners}" var="own" itemLabel="#{own.login}"  itemValue="#{own}" />
+		            <f:viewParam>
+		        </h:selectOneMenu>
+		   		
+		   		<br/>
+		   		<br/>
+				<h:commandButton value="Remove Owner"  action="#{ownerBean.removeOwner}"/>
+		   	</h:form>
+		</body>
+	</f:view>
+</html>

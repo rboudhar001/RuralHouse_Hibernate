@@ -1,0 +1,456 @@
+package bean;
+
+import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
+
+import javax.faces.event.ValueChangeEvent;
+
+import domain.Book;
+import domain.Offer;
+import domain.Owner;
+import domain.RuralHouse;
+import businessLogic.ApplicationFacadeInterface;
+import businessLogic.FacadeImplementation;
+
+public class StartWindowBean {
+	
+	//LOGICA DE NEGOCIO
+	private ApplicationFacadeInterface facadeJSF;
+	
+	//CONSTRUCTOR
+	public StartWindowBean() throws Exception {
+		//facadeJSF = new FacadeImplementation();
+		facadeJSF = FacadeSingleton.getInstance();
+	}
+	
+	// OWNER
+	//------------------------------------------------------------------------------------------
+	//Para AddOwner.xhtml
+	private String name;
+	private String login;
+	private String password;
+	private String bankAccount;
+	
+	//Para RemoveOwner.xhtml
+	private Owner owner;
+	
+	//Listas
+	private List<Owner> listaOwners;
+	//------------------------------------------------------------------------------------------
+	
+	// RURAL_HOUSE
+	//------------------------------------------------------------------------------------------
+	//Para AddRuralHouse.xhtml
+	//private Owner owner;
+	private String city;
+	private int houseNumber;
+	private String description;
+	
+	//Para RemoveRuralHouse.xhtml
+	private RuralHouse ruralHouse;
+	
+	//Listas
+	private List<RuralHouse> listaRuralHouses;
+	//------------------------------------------------------------------------------------------
+	
+	// OFFER
+	//------------------------------------------------------------------------------------------
+	//Para SetAvailability.xhtml
+	private Date firstDay;
+	private Date lastDay;
+	private int price;
+	
+	//Para RemoveSetAvailability.xhtml
+	private Offer offer;
+	
+	//Listas
+	private List<RuralHouse> listaAllRuralHouses;
+	private List<Offer> listaOffers;
+	//------------------------------------------------------------------------------------------
+	
+	// BOOK
+	//------------------------------------------------------------------------------------------
+	//Para QueryAvailability.xhtml
+	private Date firstDayBook;
+	private Date lastDayBook;
+	private int night;
+	
+	//Para BookRuralHouse.xhtml
+	private Book book;
+	private int phone;
+	//------------------------------------------------------------------------------------------
+	
+	
+	// FUNCIONES : OWNER
+	//------------------------------------------------------------------------------------------
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getBankAccount() {
+		return bankAccount;
+	}
+
+	public void setBankAccount(String bankAccount) {
+		this.bankAccount = bankAccount;
+	}
+
+	public Owner getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Owner owner) {
+		this.owner = owner;
+	}
+	
+	public String addOwner() throws Exception {
+		
+		Owner own = new Owner(this.name, this.login, this.password, this.bankAccount);
+		
+		if ( facadeJSF.addOwner(own) != null ) {
+			return "ok";
+		}
+		
+		return "error";
+	}
+	
+	public String removeOwner() throws Exception {
+		
+		List<RuralHouse> vRH  = facadeJSF.getRuralHouses(this.owner);
+		
+		if ( (vRH != null) && (!vRH.isEmpty()) ) {
+			return "error";
+		}
+		else {
+			facadeJSF.removeOwner(this.owner);
+			return "ok";
+		}
+	}
+	//------------------------------------------------------------------------------------------
+	
+
+	// FUNCIONES : RURAL HOUSE
+	//------------------------------------------------------------------------------------------
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public int getHouseNumber() {
+		return houseNumber;
+	}
+
+	public void setHouseNumber(int houseNumber) {
+		this.houseNumber = houseNumber;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public RuralHouse getRuralHouse() {
+		return ruralHouse;
+	}
+
+	public void setRuralHouse(RuralHouse ruralHouse) {
+		this.ruralHouse = ruralHouse;
+	}
+	
+	public String addRuralHouse() throws Exception {
+		
+		RuralHouse rh = new RuralHouse(houseNumber, owner, description, city);
+		
+		if ( facadeJSF.addRuralHouse(rh) != null ) {
+			return "ok";
+		}
+		
+		return "error";
+	}
+	
+	//
+	public String removeRuralHouse() throws Exception {
+		
+		/*
+		//Si el owner no tiene casas rurales ... error
+		if (facadeJSF.getRuralHouses(this.owner) != null) {
+			
+			Calendar cal = Calendar.getInstance(); //Obtenemos la fecha actual
+			Date firstDay = new Date (cal.getTimeInMillis());
+			
+			int año = cal.get(Calendar.YEAR) + 100; //Obtenemos el año actual y le sumamos 100 años
+			cal.set(año, 12, 31); //31 de diciembre del año (actual + 100)
+			Date lastDay = new Date (cal.getTimeInMillis());
+			
+			//Si NO existe alguna oferta entre la fecha actual y dentro de 100 años ... eliminamos la casa rural.
+			if (facadeJSF.getOffers(this.ruralHouse, firstDay, lastDay) != null) {
+			
+				if ( facadeJSF.removeRuralHouse(this.ruralHouse) != null) {
+					return "ok";
+				}
+			}
+		}
+		*/
+		
+		this.ruralHouse.setOwner(this.owner);
+		if ( facadeJSF.removeRuralHouse(this.ruralHouse) != null) {
+			return "ok";
+		}
+		
+		return "error";
+	}
+	//------------------------------------------------------------------------------------------
+	
+	
+	// FUNCIONES : OFFER
+	//------------------------------------------------------------------------------------------
+	public Date getFirstDay() {
+		return firstDay;
+	}
+
+	public void setFirstDay(Date firstDay) {
+		this.firstDay = firstDay;
+	}
+
+	public Date getLastDay() {
+		return lastDay;
+	}
+
+	public void setLastDay(Date lastDay) {
+		this.lastDay = lastDay;
+	}
+	
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	
+	public Offer getOffer() {
+		return offer;
+	}
+
+	public void setOffer(Offer offer) {
+		this.offer = offer;
+	}
+	
+	public String addOffer() throws Exception {
+		
+		if ( facadeJSF.createOffer(this.ruralHouse, this.firstDay, this.lastDay, this.price) != null ) {
+			return "ok";
+		}
+		
+		return "error";
+	}
+	
+	public String removeOffer() throws Exception {
+		
+		this.offer.setRuralHouse(this.ruralHouse);
+		if ( facadeJSF.thisOfferHaveBook(offer) == true ) {
+			
+			if ( facadeJSF.removeOffer(offer) != null ) {
+				return "ok";
+			}
+		}
+		
+		return "error";
+	}
+	//------------------------------------------------------------------------------------------
+	
+	
+	// FUNCIONES : BOOK
+	//------------------------------------------------------------------------------------------
+	
+	public Date getFirstDayBook() {
+		return firstDayBook;
+	}
+
+	public void setFirstDayBook(Date firstDayBook) {
+		this.firstDayBook = firstDayBook;
+	}
+
+	public Date getLastDayBook() {
+		return lastDayBook;
+	}
+
+	public void setLastDayBook(Date lastDayBook) {
+		this.lastDayBook = lastDayBook;
+	}
+
+	public int getNight() {
+		return night;
+	}
+
+	public void setNight(int night) {
+		this.night = night;
+	}
+	
+	public int getPhone() {
+		return phone;
+	}
+
+	public void setPhone(int phone) {
+		this.phone = phone;
+	}
+	
+	public String queryOffer() throws Exception {
+		
+		//Actualizamos el valor de lastDayBook
+ 		final long diams = 1000*60*60*24;
+ 		long nights = diams * night;
+    	lastDayBook = new Date((long)(firstDay.getTime() + nights));
+		
+    	//Consultamos las ofertas
+    	listaOffers = facadeJSF.getOffers(this.ruralHouse, this.firstDayBook, this.lastDayBook);
+    	
+    	return "bookRuralHouse";
+	}
+	
+	public String bookOffer() throws Exception {
+		
+		offer.setRuralHouse(this.ruralHouse);
+		if (facadeJSF.createBook(this.offer, this.phone) != null ) {
+			return "ok";
+		}
+		
+		return "error";
+	}
+	
+	//------------------------------------------------------------------------------------------
+	
+	
+	// LISTAS DESPLEGABLES
+	//------------------------------------------------------------------------------------------
+	public List<Owner> getListaOwners() throws Exception {
+		listaOwners = facadeJSF.getOwners();
+		return listaOwners;
+	}
+
+	public List<RuralHouse> getListaRuralHouses() throws Exception {
+		listaRuralHouses = facadeJSF.getRuralHouses(this.owner);
+		return listaRuralHouses;
+	}
+	
+	public List<Offer> getListaOffers() throws Exception {
+		listaOffers = facadeJSF.getAllOffers(ruralHouse);
+		return listaOffers;
+	}
+	
+	public List<RuralHouse> getListaAllRuralHouses() throws Exception {
+		listaAllRuralHouses = facadeJSF.getAllRuralHouses();
+		return listaAllRuralHouses;
+	}
+	//------------------------------------------------------------------------------------------
+	
+	// START WINDOW
+	//------------------------------------------------------------------------------------------
+	public String anadirDueno() {
+		// TODO Auto-generated method stub
+		return "addOwner";
+	}
+	
+	//
+	public String eliminarDueno() {
+		// TODO Auto-generated method stub
+		return "removeOwner";
+	}
+	
+	//
+	public String anadirCasaRural() {
+		// TODO Auto-generated method stub
+		return "addRuralHouse";
+	}
+	
+	//
+	public String eliminarCasaRural() {
+		// TODO Auto-generated method stub
+		return "removeRuralHouse";
+	}
+	
+	//
+	public String eliminarCasaRuralOriginal() {
+		// TODO Auto-generated method stub
+		return "removeRuralHouseOriginal";
+	}
+	
+	//
+	public String crearOferta() {
+		// TODO Auto-generated method stub
+		return "setAvailability";
+	}
+	
+	//
+	public String crearOfertaOriginal() {
+		// TODO Auto-generated method stub
+		return "setAvailabilityOriginal";
+	}
+	
+	//
+	public String eliminarOfertaUno() {
+		// TODO Auto-generated method stub
+		return "removeSetAvailabilityOne";
+	}
+	
+	//
+	public String eliminarOfertaDos() {
+		// TODO Auto-generated method stub
+		return "removeSetAvailabilityTwo";
+	}
+	
+	//
+	public String eliminarOfertaTres() {
+		// TODO Auto-generated method stub
+		return "removeSetAvailabilityThree";
+	}
+	
+	//
+	public String consultarOferta() {
+		// TODO Auto-generated method stub
+		return "queryAvailability";
+	}
+	
+	//
+	public String consultarOfertaReserva() {
+		// TODO Auto-generated method stub
+		return "queryAvailabilityBook";
+	}
+	
+	//
+	public String reservarCasaRural() {
+		// TODO Auto-generated method stub
+		return "bookRuralHouse";
+	}
+	//------------------------------------------------------------------------------------------
+}

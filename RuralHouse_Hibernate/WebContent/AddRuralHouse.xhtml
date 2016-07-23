@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core">
+
+	<f:view>
+		<head>
+			<title>Añadir Casa Rural</title>
+		</head>
+		
+		<body>
+			<h:form>
+				<h2>Rellene el siguiente formulario ...</h2>
+				<br/>
+				<table>
+					<tr>
+						<td>Ciudad: </td>
+						<td><h:inputText id="city" value="#{ruralHouseBean.city}"></h:inputText></td>
+					</tr>
+					
+					<tr>
+						<td>Numero de la casa: </td>
+						<td>
+							<h:inputText id="houseNumber" value="#{ruralHouseBean.houseNumber}">
+							    <f:convertNumber integerOnly="true" type="number" />
+							</h:inputText>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>Descripcion: </td>
+						<td><h:inputText id="description" value="#{ruralHouseBean.description}"></h:inputText></td>
+					</tr>
+				</table>
+				
+				<br/>
+				<p>
+					<h:commandButton value="Añadir casa"  action="#{ruralHouseBean.addRuralHouse}"/>
+				</p>
+			</h:form>
+		</body>
+	</f:view>
+</html>

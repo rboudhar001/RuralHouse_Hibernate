@@ -1,0 +1,150 @@
+package bean;
+
+import java.util.Date;
+import java.util.List;
+
+import domain.Book;
+import domain.Offer;
+import domain.Owner;
+import domain.RuralHouse;
+import businessLogic.ApplicationFacadeInterface;
+
+public class QueryAndBookBean {
+
+	//LOGICA DE NEGOCIO
+	private ApplicationFacadeInterface facadeJSF;
+	
+	//CONSTRUCTOR
+	public QueryAndBookBean() throws Exception {
+		facadeJSF = FacadeSingleton.getInstance();
+	}
+	
+	// BOOK
+	//------------------------------------------------------------------------------------------
+	//Para QueryAvailability.xhtml4
+	private Date firstDayBook = FacadeSingleton.getFirstDayBook();
+	private Date lastDayBook = FacadeSingleton.getLastDayBook();
+	private int night;
+	
+	//Para BookRuralHouse.xhtml
+	private Owner owner;
+	private RuralHouse ruralHouse = FacadeSingleton.getRuralHouseSelected();
+	private Offer offer;
+	private Book book;
+	private int phone;
+	
+	//Listas
+	private List<Owner> listaOwners;
+	private List<RuralHouse> listaRuralHouses;
+	private List<Offer> listaOffers;
+	private List<RuralHouse> listaAllRuralHouses;
+	//------------------------------------------------------------------------------------------
+	
+	// FUNCIONES : BOOK
+	//------------------------------------------------------------------------------------------
+	public Date getFirstDayBook() {
+		return firstDayBook;
+	}
+
+	public void setFirstDayBook(Date firstDayBook) {
+		this.firstDayBook = firstDayBook;
+	}
+
+	public Date getLastDayBook() {
+		return lastDayBook;
+	}
+
+	public void setLastDayBook(Date lastDayBook) {
+		this.lastDayBook = lastDayBook;
+	}
+
+	public int getNight() {
+		return night;
+	}
+
+	public void setNight(int night) {
+		this.night = night;
+	}
+	
+	public int getPhone() {
+		return phone;
+	}
+
+	public void setPhone(int phone) {
+		this.phone = phone;
+	}
+	
+	public Owner getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Owner owner) {
+		this.owner = owner;
+	}
+	
+	public RuralHouse getRuralHouse() {
+		return ruralHouse;
+	}
+
+	public void setRuralHouse(RuralHouse ruralHouse) {
+		this.ruralHouse = ruralHouse;
+	}
+	
+	public Offer getOffer() {
+		return offer;
+	}
+
+	public void setOffer(Offer offer) {
+		this.offer = offer;
+	}
+	
+	public String queryOffer() throws Exception {
+		
+		//Actualizamos el valor de lastDayBook
+ 		final long diams = 1000*60*60*24;
+ 		long nights = diams * night;
+    	this.lastDayBook = new Date((long)(this.firstDayBook.getTime() + nights));
+		
+    	System.out.println("queryOffer : firstDayBook; " + firstDayBook);
+		System.out.println("queryOffer : lastDayBook; " + lastDayBook);
+		
+    	//Guardamos las variables en una clase static
+    	FacadeSingleton.setRuralHouseSelected(this.ruralHouse);
+    	FacadeSingleton.setFirstDayBook(this.firstDayBook);
+    	FacadeSingleton.setLastDayBook(this.lastDayBook);
+    	
+    	System.out.println("QueryAndBookBean : queryOffer()");
+    	
+    	return "bookRuralHouse";
+	}
+	
+	public String bookOffer() throws Exception {
+		
+		System.out.println("QueryAndBookBean : bookOffer()");
+		
+		offer.setRuralHouse(FacadeSingleton.getRuralHouseSelected());
+		if (facadeJSF.createBook(this.offer, this.phone) != null ) {
+			return "ok";
+		}
+		
+		return "error";
+	}
+	//------------------------------------------------------------------------------------------
+	
+	// LISTAS DESPLEGABLES
+	//------------------------------------------------------------------------------------------
+	public List<RuralHouse> getListaAllRuralHouses() throws Exception {
+		listaAllRuralHouses = facadeJSF.getAllRuralHouses();
+		return listaAllRuralHouses;
+	}
+	
+	public List<Offer> getListaOffers() throws Exception {
+    	//Consultamos las ofertas para la lista
+    	listaOffers = facadeJSF.getOffersNotBook(this.ruralHouse, this.firstDayBook, this.lastDayBook);
+    	
+		System.out.println("QueryAndBookBean : getListaOffers()");
+		
+		return listaOffers;
+	}
+	//------------------------------------------------------------------------------------------
+}

@@ -1,0 +1,108 @@
+package bean;
+
+import java.util.List;
+
+import domain.Owner;
+import domain.RuralHouse;
+import businessLogic.ApplicationFacadeInterface;
+
+public class OwnerBean {
+
+	//LOGICA DE NEGOCIO
+	private ApplicationFacadeInterface facadeJSF;
+	
+	//CONSTRUCTOR
+	public OwnerBean() throws Exception {
+		facadeJSF = FacadeSingleton.getInstance();
+	}
+	
+	// OWNER
+	//------------------------------------------------------------------------------------------
+	//Para AddOwner.xhtml
+	private String name;
+	private String login;
+	private String password;
+	private String bankAccount;
+	
+	//Para RemoveOwner.xhtml
+	private Owner owner;
+	
+	//Listas
+	private List<Owner> listaOwners;
+	//------------------------------------------------------------------------------------------
+	
+	// FUNCIONES : OWNER
+	//------------------------------------------------------------------------------------------
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getBankAccount() {
+		return bankAccount;
+	}
+
+	public void setBankAccount(String bankAccount) {
+		this.bankAccount = bankAccount;
+	}
+
+	public Owner getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Owner owner) {
+		this.owner = owner;
+	}
+	
+	public String addOwner() throws Exception {
+		
+		Owner own = new Owner(this.name, this.login, this.password, this.bankAccount);
+		
+		if ( facadeJSF.addOwner(own) != null ) {
+			return "ok";
+		}
+		
+		return "error";
+	}
+	
+	public String removeOwner() throws Exception {
+		
+		List<RuralHouse> vRH  = facadeJSF.getRuralHouses(this.owner);
+		
+		if ( (vRH != null) && (!vRH.isEmpty()) ) {
+			return "error";
+		}
+		else {
+			facadeJSF.removeOwner(this.owner);
+			return "ok";
+		}
+	}
+	//------------------------------------------------------------------------------------------
+	
+	// LISTAS DESPLEGABLES
+	//------------------------------------------------------------------------------------------
+	public List<Owner> getListaOwners() throws Exception {
+		listaOwners = facadeJSF.getOwners();
+		return listaOwners;
+	}
+	//------------------------------------------------------------------------------------------
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.hibernate.Session"/>
+<fullyQualifiedTypeName name="modelo.HibernateUtil"/>
+<fullyQualifiedTypeName name="domain.Offer"/>
+<fullyQualifiedTypeName name="domain.Book"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="businessLogic.BookManager"/>
+<fullyQualifiedTypeName name="businessLogic.ApplicationFacadeInterface"/>
+<fullyQualifiedTypeName name="businessLogic.FacadeImplementation"/>
+<fullyQualifiedTypeName name="domain.Owner"/>
+<fullyQualifiedTypeName name="domain.RuralHouse"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
+</qualifiedTypeNameHistroy>

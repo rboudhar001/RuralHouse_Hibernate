@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core"
+		xmlns:p = "http://primefaces.org/ui"
+		>
+
+<f:view>
+	<h:head>
+		<title>Crear Oferta</title>
+	</h:head>
+	
+	<h:body>
+   		<h:form>
+	   		<h3>Elija la casa a la que desea añadir una oferta: </h3>
+			<h:selectOneMenu id="casas" value="#{setAvailabilityBean.ruralHouse}" converter="omnifaces.SelectItemsConverter">
+	            <f:selectItems value="#{setAvailabilityBean.listaRuralHouses}" var="rh" itemLabel="#{rh.toString}" itemValue="#{rh}" />
+	        </h:selectOneMenu>
+	        
+	        <table>
+				<tr>
+					<td>Seleccione el dia de comienzo de la oferta: </td>
+					<td>
+			     		<p:calendar id="firstDay" value="#{setAvailabilityBean.firstDay}"></p:calendar>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Seleccione el dia final de la oferta: </td>						
+					<td>
+						<p:calendar id="lastDay" value="#{setAvailabilityBean.lastDay}"/>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Precio: </td>
+					<td>
+						<h:inputText id="price" value="#{setAvailabilityBean.price}">
+						    <f:convertNumber integerOnly="true" type="number" />
+						    <f:validateLongRange minimum="1"/>
+						</h:inputText>
+					</td>
+				</tr>
+			</table>
+			
+			<p>
+				<h:commandButton value="Aceptar"  action="#{setAvailabilityBean.addOffer}"/>
+			</p>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

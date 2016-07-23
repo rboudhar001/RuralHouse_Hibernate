@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core">
+		
+<f:view>
+	<head>
+		<title>Eliminar Oferta</title>
+	</head>
+
+	<body>
+		<h:form>
+	        <h3>Elija la oferta que desea eliminar: </h3>
+			<h:selectOneMenu id="rsa-offer" value="#{setAvailabilityBean.offer}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage=" Error, seleccione una oferta">
+				<f:selectItem itemLabel="Seleccione una oferta... " noSelectionOption="true" />
+				<f:selectItems value="#{setAvailabilityBean.listaOffers}" var="o" itemLabel="#{o.getToString()}" itemValue="#{o}" />
+				<f:validateRequired />
+			</h:selectOneMenu>
+			<h:message for="rsa-offer" style="color:red" />
+	        
+			<br/>
+			<br/>
+			<h:commandButton value="Remove SetAvailability"  action="#{setAvailabilityBean.removeOffer}"/>
+		</h:form>
+	</body>
+</f:view>
+</html>

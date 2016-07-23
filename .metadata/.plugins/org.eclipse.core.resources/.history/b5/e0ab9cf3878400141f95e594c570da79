@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core">´
+		
+<f:view>
+	<head>
+		<title>Eliminar Casa Rural</title>
+	</head>
+
+	<body>
+		<h:form>
+	   		<h3>Elija dueño al que eliminarle la casa rural: </h3>
+	   		
+			<h:selectOneMenu id="duenos" value="#{ruralHouseBean.owner}" converter="omnifaces.SelectItemsConverter">
+	            <f:selectItems value="#{ruralHouseBean.listaOwners}" var="entity" />
+	        </h:selectOneMenu>
+	        
+			<h:selectOneMenu id="iterator" value="#{ruralHouseBean.owner}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage=" Error, seleccione una casa rural">
+				<f:selectItem itemLabel="Seleccione una casa rural ... " noSelectionOption="true" />
+				<f:selectItems value="#{ownerBean.listaRuralHouses}" var="rh" itemLabel="#{own.login}" itemValue="#{own}" />
+				<f:validateRequired />
+			</h:selectOneMenu>
+			<h:message for="iterator" style="color:red" />
+	        
+			<br/>
+			<br/>
+			<h:commandButton value="Remove Rural House"  action="#{ruralHouseBean.eliminarCasaRuralOriginal}"/>
+		</h:form>
+	</body>
+</f:view>
+</html>

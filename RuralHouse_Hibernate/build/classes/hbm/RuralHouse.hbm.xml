@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 15, 2014 6:27:15 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="domain.RuralHouse" table="RURALHOUSE">
+        <id name="houseNumber" type="int">
+            <column name="HOUSENUMBER" />
+            <generator class="assigned" />
+        </id>
+        <property name="city" type="java.lang.String">
+            <column name="CITY" />
+        </property>
+        <property name="description" type="java.lang.String">
+            <column name="DESCRIPTION" />
+        </property>
+        <many-to-one name="owner" class="domain.Owner" fetch="join">
+            <column name="OWNER" />
+        </many-to-one>
+        <list name="offers" inverse="false" table="OFFER" lazy="true" access="field">
+            <key>
+                <column name="HOUSENUMBER" />
+            </key>
+            <list-index></list-index>
+            <one-to-many class="domain.Offer" />
+        </list>
+        <property name="toString" type="java.lang.String" access="field">
+            <column name="TOSTRING" />
+        </property>
+    </class>
+</hibernate-mapping>

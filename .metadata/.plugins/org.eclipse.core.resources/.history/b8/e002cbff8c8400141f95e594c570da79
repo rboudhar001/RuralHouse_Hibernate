@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core">
+		
+<f:view>
+	<head>
+		<title>Eliminar Oferta</title>
+	</head>
+
+	<body>
+		<h:form>
+			<h3>Elija dueño para visualizar sus casas rurales: </h3>
+			<h:selectOneMenu id="duenos" value="#{setAvailabilityBean.owner}" converter="omnifaces.SelectItemsConverter">
+	            <f:selectItems value="#{setAvailabilityBean.listaOwners}" var="own" itemLabel="#{own.login}" itemValue="#{own}" />
+	        </h:selectOneMenu>
+	        
+			<br/>
+			<br/>
+			<h:commandButton value="Remove SetAvailability"  action="#{setAvailabilityBean.eliminarOfertaDos}"/>
+		</h:form>
+	</body>
+</f:view>
+</html>

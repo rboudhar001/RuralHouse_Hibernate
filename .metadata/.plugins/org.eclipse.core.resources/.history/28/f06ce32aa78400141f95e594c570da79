@@ -1,0 +1,21 @@
+package bean;
+
+import businessLogic.FacadeImplementation;
+import domain.Owner;
+
+public class OwnerSingleton {
+	
+	private static Owner owner = null;
+	
+	protected OwnerSingleton() {
+	}
+	
+	public static Owner getOwnerLoged() {
+		
+		return owner;
+	}
+	
+	public static void setOwnerLoged(Owner owner) {
+		OwnerSingleton.owner = owner;
+	}
+}

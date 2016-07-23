@@ -1,0 +1,3 @@
+#Tomcat publish data
+#Wed Dec 17 15:00:13 CET 2014
+org.eclipse.jst.jee.server\:RuralHouse_Hibernate=C\:\\Program Files\\Spring\\sts-bundle\\pivotal-tc-server-developer-3.0.0.RELEASE\\base-instance\\wtpwebapps\\RuralHouse_Hibernate

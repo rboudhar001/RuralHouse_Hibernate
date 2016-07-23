@@ -1,0 +1,369 @@
+package businessLogic;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import modelo.HibernateUtil;
+
+import org.hibernate.Session;
+
+import domain.Book;
+import domain.Offer;
+import domain.Owner;
+import domain.RuralHouse;
+
+// Hibernate
+public class FacadeImplementation implements ApplicationFacadeInterface {
+
+	private static final long serialVersionUID = 1L;
+	
+	public FacadeImplementation() {
+	}
+
+	/**
+	 * This method obtains owner rural houses 
+	 * 
+	 * @param owner object
+	 *            
+	 * @return a list of Rural Houses
+	 */
+	public List<RuralHouse> getRuralHouses(Owner own) {
+		
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		
+		List<RuralHouse> result = session.createQuery("from RuralHouse where owner='" + own.getLogin() + "'").list();
+		
+		session.getTransaction().commit();
+		return result;
+	}
+
+	/**
+	 * This method creates an offer with a house number, first day, last day and price
+	 * 
+	 * @param House
+	 *            number, start day, last day and price
+	 * @return None
+	 */
+	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price) {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		
+		Offer o = new Offer(ruralHouse, firstDay, lastDay, price);
+		
+		session.save(o);
+		session.getTransaction().commit();
+		return o;
+	}
+
+	/**
+	 * This method creates a book with a corresponding parameters
+	 * 
+	 * @param First
+	 *            day, last day, house number and telephone
+	 * @return a book
+	 */
+	public Book createBook(RuralHouse rh, Date firstDate, Date lastDate, String bookTelephoneNumber) {
+
+		Book b = null;
+		try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			List<RuralHouse> result = session.createQuery("from RuralHouse where city='" + rh.getCity() + "' AND housenumber='" + rh.getHouseNumber() + "'").list();
+			
+			RuralHouse rHouse = result.get(0);
+			
+			Offer offer;
+			offer = rHouse.findOffer(firstDate, lastDate);
+			
+			if (offer != null) {
+				 b = new Book(bookTelephoneNumber, offer);
+				 offer.setBook(b);
+			}
+			
+			session.save(b);
+			session.getTransaction().commit();
+			
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		
+		return b;
+	}
+
+	/**
+	 * This method obtains available offers for a concrete house in a certain period 
+	 * 
+	 * @param houseNumber, the house number where the offers must be obtained 
+	 * @param firstDay, first day in a period range 
+	 * @param lastDay, last day in a period range
+	 * @return a list of offers(Offer class)  available  in this period
+	 */
+	public List<Offer> getOffersNotBook(RuralHouse rh, Date firstDay, Date lastDay) {
+		
+		List<Offer> listOffer = null;
+		try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			List<RuralHouse> result = session.createQuery("from RuralHouse where city='" + rh.getCity() + "' AND housenumber='" + rh.getHouseNumber() + "'").list();
+			
+			List<Offer> aux = result.get(0).getOffers(firstDay, lastDay);
+			
+			for (Offer o : aux) {
+				if (o.getBook() != null) {
+					listOffer.add(o);
+				}
+			}
+			
+			session.getTransaction().commit();
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation: getOffers : No se pudo consultar las Ofertas de la RuralHouse: " + e.toString());
+		}
+		
+		return listOffer;
+	}
+	
+	/**
+	 * This method existing  owners 
+	 * 
+	 */
+	public List<Owner> getOwners() {
+		
+		List<Owner> listOwner = null;
+		try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			List<Owner> result = session.createQuery("from Owner").list();
+			listOwner = result;
+			
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation: getOwners : No se pudo obtener a todos los owners: " + e.toString());
+		}
+		
+		return listOwner;
+	} 
+	
+	public List<RuralHouse> getAllRuralHouses() {
+		
+		List<RuralHouse> listRH = new ArrayList<RuralHouse>();
+		try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			List<RuralHouse> result = session.createQuery("from RuralHouse").list();
+			for (RuralHouse rh : result) {
+				if (rh.getOwner() != null) {
+					listRH.add(rh);
+				}
+			}
+			
+			session.getTransaction().commit();
+		
+		} catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation: getAllRuralHouses : No se pudo obtener todas las casas rurales: " + e.toString());
+		}
+		 return listRH;
+	}
+
+	//AÑADIDA
+	public Owner addOwner(Owner own) {
+		
+		Owner o = null;
+		try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			session.save(own);
+			session.getTransaction().commit();
+			
+			o = own;
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation:addOwner : No se pudo añadir al Owner: " + e.toString());
+		}
+		
+		return o;
+	}
+	
+	//AÑADIDA
+	public Owner removeOwner(Owner own) {
+		
+		Owner o = null;
+		try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			session.delete(own);
+			session.getTransaction().commit();
+			
+			o = own;
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation: removeOwner : No se pudo eliminar al Owner: " + e.toString());
+		}
+		return o;
+	}
+	
+	//AÑADIDA
+	public RuralHouse addRuralHouse(RuralHouse rh) {
+		
+		RuralHouse rHouse = null;
+		try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			List<Owner> result = session.createQuery("from Owner where login='" + rh.getOwner().getLogin() + "'").list();
+			result.get(0).addRuralHouse(rh.getHouseNumber(), rh.getDescription(), rh.getCity());
+			
+			session.save(rh);
+			session.save(result.get(0));
+			session.getTransaction().commit();
+			
+			rHouse = rh;
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation:addRuralHouse : No se pudo añadir la casa rural: " + e.toString());
+		}
+		return rHouse;
+	}
+
+	//AÑADIDA
+	public RuralHouse removeRuralHouse(RuralHouse rh) {
+		
+		RuralHouse ruralHouse = null;
+		try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			List<Owner> result_own = session.createQuery("from Owner where login='" + rh.getOwner().getLogin() + "'").list();
+			result_own.get(0).removeRuralHouse(rh); //METODO AÑADIDO
+			
+			List<RuralHouse> result_rh = session.createQuery("from RuralHouse where city='" + rh.getCity() + "' AND housenumber='" + rh.getHouseNumber() + "'").list();
+			
+			session.save(result_own.get(0));
+			session.delete(result_rh.get(0));
+			
+			session.getTransaction().commit();
+			
+			ruralHouse = rh;
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation: removeRuralHouse : No se pudo eliminar la Rural House : " + e.toString());
+		}
+		
+		return ruralHouse;
+	}
+
+	//AÑADIDA
+	public boolean thisOfferHaveBook(Offer offer) {
+		
+		//try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			List<Book> result = session.createQuery("from Book where housenumber='" + offer.getOfferNumber() + "'").list();
+			
+			if ( (result != null) && (!result.isEmpty()) ) {
+				return true;
+			}
+			
+			session.getTransaction().commit();
+		//}
+		//catch (Exception e) {
+		//	System.out.println("ERROR: FacadeImplementation: thisOfferHaveBook : No pudo consultar si la oferta ya esta reservada : " + e.toString());
+		//}
+		
+		return false;
+	}
+
+	//AÑADIDA
+	public Offer removeOffer(Offer offer) {
+		
+		Offer of = null;
+		try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			List<RuralHouse> result_rh = session.createQuery("from RuralHouse where housenumber='" + offer.getRuralHouse().getHouseNumber() + "'").list();
+			result_rh.get(0).removeOffer(offer);
+			
+			List<Offer> result_o = session.createQuery("from Offer where ruralhouse='" + offer.getRuralHouse().getHouseNumber() + "'").list();
+			result_o.get(0).setRuralHouse(null);
+			
+			session.save(result_rh.get(0));
+			session.save(result_o.get(0));
+			session.getTransaction().commit();
+			
+			of = offer;
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation: removeOffer : No se pudo eliminar la oferta : " + e.toString());
+		}
+		
+		return of;
+	}
+	
+	//AÑADIDA
+	public List<Offer> getAllOffers(RuralHouse rh) {
+		
+		List<Offer> listOffer = null;
+		//try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+
+			System.out.println("\nFacade : getAllOffers : RH: " + rh + "\n");
+			listOffer = session.createQuery("from Offer where ruralhouse='" + rh.getHouseNumber() + "'").list();
+			
+			System.out.println("Seguir : 2");
+			
+			System.out.println("\n");
+			for (Offer o : listOffer) {
+				System.out.println("Offer : " + o.getFirstDay());
+				System.out.println("Offer : " + o.getLastDay());
+				System.out.println("Offer : " + o.getPrice() + "\n");
+			}
+			
+			session.getTransaction().commit();
+		//}
+		//catch (Exception e) {
+		//	System.out.println("ERROR: FacadeImplementation: getAllOffers : No pudo consultar todas las ofertas de la casa rural : " + e.toString());
+		//}
+			
+		return listOffer;
+	}
+
+	//AÑADIDA
+	public Book createBook(Offer offer, int phone) {
+		
+		Book b = null;
+		Book b_aux = null;
+		try {
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			
+			b = new Book((""+phone), offer);
+			
+			List<Offer> result = session.createQuery("from Offer where offernumber='" + offer.getOfferNumber() + "'").list();
+			result.get(0).setBook(b);
+			
+			session.save(b);
+			session.save(result.get(0));
+			session.getTransaction().commit();
+
+			 b_aux = b;
+			 
+		} catch (Exception exc) {
+			exc.printStackTrace();
+			return null;
+		}
+		
+		return b_aux;
+	}
+}
+

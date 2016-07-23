@@ -1,0 +1,41 @@
+package bean;
+
+import domain.Owner;
+import businessLogic.ApplicationFacadeInterface;
+import businessLogic.FacadeImplementation;
+
+public class FacadeSingleton {
+	
+	private static ApplicationFacadeInterface instance = null;
+	
+	private static Owner owner = null;
+	private static RuralHouse ruralHouse = null;
+	
+	protected FacadeSingleton() {
+	}
+	
+	public static ApplicationFacadeInterface getInstance() {
+		
+		if(instance == null) {
+			instance = new FacadeImplementation();
+		}
+		
+		return instance;
+	}
+	
+	public static Owner getOwnerLoged() {
+		return owner;
+	}
+	
+	public static void setOwnerLoged(Owner owner) {
+		OwnerSingleton.owner = owner;
+	}
+	
+	public static RuralHouse getRuralHouseSelected() {
+		return ruralHouse;
+	}
+	
+	public static void setRuralHouseSelected(Owner owner) {
+		OwnerSingleton.ruralHouse = ruralHouse;
+	}
+}

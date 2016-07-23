@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core">´
+		
+<f:view>
+	<head>
+		<title>Eliminar Casa Rural</title>
+	</head>
+
+	<body>
+		<h:form>
+			<h3>Elija la casa rural que desea eliminar: </h3>
+	        <h:selectOneMenu id="rrh-ruralhouse" value="#{ruralHouseBean.ruralHouse}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage=" Error, seleccione una casa rural">
+				<f:selectItem itemLabel="Seleccione una casa rural ... " noSelectionOption="true" />
+				<f:selectItems value="#{ruralHouseBean.listaRuralHouses}" var="rh" itemLabel="#{rh.toString}" itemValue="#{rh}" />
+				<f:validateRequired />
+			</h:selectOneMenu>
+			<h:message for="rrh-ruralhouse" style="color:red" />
+	   		
+			<br/>
+			<br/>
+			<h:commandButton value="Remove Rural House"  action="#{ruralHouseBean.removeRuralHouse}"/>
+		</h:form>
+	</body>
+</f:view>
+</html>

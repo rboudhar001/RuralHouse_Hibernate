@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core">
+		
+	<f:view>
+		<head>
+			<title>Pantalla de Inicio</title>
+		</head>
+
+		<body>
+			<h:form>
+				<p>
+					<h:commandButton value="Add Owner" style=" backgroundcolor:#000000 ;width: 150px;height: 30px;color: green;border-color: green;" action="#{startWindowBean.anadirDueno}"/>
+					<br/>
+					<br/>
+					<h:commandButton value="Remove Owner" style="backgroundcolor:#000000 ;width: 150px;height: 30px;color: red;border-color: red;" action="#{startWindowBean.eliminarDueno}"/>
+					<br/>
+					<br/>
+					<hr /> <!-- Esto pone una linea -->
+					<br/>
+					<h:commandButton value="Add Rural House" style="backgroundcolor:#000000 ;width: 150px;height: 30px;color: green;border-color: green;" action="#{startWindowBean.anadirCasaRural}"/>
+					<br/>
+					<br/>
+					<h:commandButton value="Remove Rural House" style="backgroundcolor:#000000 ;width: 150px;height: 30px;color: red;border-color: red;" action="#{startWindowBean.eliminarCasaRural}"/>
+					<br/>
+					<br/>
+					<hr /> <!-- Esto pone una linea -->
+					<br/>
+					<h:commandButton value="Set Availability" style="backgroundcolor:#000000 ;width: 150px;height: 30px;color: green;border-color: green;" action="#{startWindowBean.crearOferta}"/>
+					<br/>
+					<br/>
+					<h:commandButton value="Remove Set Availability" style="backgroundcolor:#000000 ;width: 150px;height: 30px;color: red;border-color: red;" action="#{startWindowBean.eliminarOfertaUno}"/>
+					<br/>
+					<br/>
+					<h:commandButton value="Query Availability" style="backgroundcolor:#000000 ;width: 150px;height: 30px;color: orange;border-color: orange;" action="#{startWindowBean.consultarOferta}"/>
+					<br/>
+				</p>
+			</h:form>
+		</body>
+	</f:view>
+</html>

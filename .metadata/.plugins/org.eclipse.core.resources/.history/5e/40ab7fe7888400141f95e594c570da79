@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14175096603830" configfile="/RuralHouse_Hibernate/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="StartWindow.xhtml" x="770" y="1735" id="pf14181153725930" referenceLink="//@navigationRule.18/@navigationCase.0/@toViewId|" outlinks="pf14181153725931 pf14181153725932 pf14181153725933 pf14181153725934 pf14181153725935 pf14181153725937" inlinks="pf14181153725938 pf14181153725939 pf141811537259310 pf141811537259311 pf141811537259312 pf141811537259313 pf141811537259314 pf14186678215000" path="/StartWindow.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="AddOwner.xhtml" x="554" y="1938" id="pf141811537259315" referenceLink="//@navigationRule.19/@navigationCase.0/@toViewId|" outlinks="pf14181153725938" inlinks="pf14181153725931 pf14186678215001" path="/AddOwner.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="RemoveOwner.xhtml" x="554" y="765" id="pf141811537259316" referenceLink="//@navigationRule.13/@fromViewId|" outlinks="pf141811537259314" inlinks="pf14181153725932" path="/RemoveOwner.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="AddRuralHouse.xhtml" x="554" y="1533" id="pf141811537259317" referenceLink="//@navigationRule.4/@fromViewId|" outlinks="pf14181153725939" inlinks="pf14181153725933" path="/AddRuralHouse.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="RemoveRuralHouse.xhtml" x="986" y="2322" id="pf141811537259318" referenceLink="//@navigationRule.11/@fromViewId|" outlinks="pf141811537259319" inlinks="pf14181153725934" path="/RemoveRuralHouse.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="SetAvailability.xhtml" x="986" y="2706" id="pf141811537259320" referenceLink="//@navigationRule.7/@fromViewId|" outlinks="pf141811537259321" inlinks="pf14181153725935" path="/SetAvailability.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="SetAvailabilityOriginal.xhtml" x="554" y="2706" id="pf141811537259322" referenceLink="//@navigationRule.8/@fromViewId|" outlinks="pf141811537259310" inlinks="pf141811537259321" path="/SetAvailabilityOriginal.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="RemoveSetAvailabilityThree.xhtml" x="554" y="381" id="pf141811537259323" referenceLink="//@navigationRule.16/@navigationCase.0/@toViewId|" outlinks="pf141811537259311" inlinks="pf141811537259324" path="/RemoveSetAvailabilityThree.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="QueryAvailability.xhtml" x="338" y="1442" id="pf141811537259325" referenceLink="//@navigationRule.20/@navigationCase.0/@toViewId|" outlinks="pf141811537259326" inlinks="pf14186678215012" path="/QueryAvailability.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="BookRuralHouse.xhtml" x="554" y="1149" id="pf141811537259327" referenceLink="//@navigationRule.17/@navigationCase.0/@toViewId|" outlinks="pf141811537259312" inlinks="pf141811537259326" path="/BookRuralHouse.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="RemoveRuralHouseOriginal.xhtml" x="554" y="2322" id="pf141811537259328" referenceLink="//@navigationRule.12/@fromViewId|" outlinks="pf141811537259313" inlinks="pf141811537259319" path="/RemoveRuralHouseOriginal.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="RemoveSetAvailabilityOne.xhtml" x="986" y="178" id="pf141811537259329" referenceLink="//@navigationRule.15/@fromViewId|" outlinks="pf141811537259330" inlinks="pf14181153725937" path="/RemoveSetAvailabilityOne.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="RemoveSetAvailabilityTwo.xhtml" x="338" y="178" id="pf141811537259331" referenceLink="//@navigationRule.16/@fromViewId|" outlinks="pf141811537259324" inlinks="pf141811537259330" path="/RemoveSetAvailabilityTwo.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="Login.xhtml" x="122" y="1735" id="pf14186678215013" referenceLink="//@navigationRule.20/@navigationCase.1/@toViewId|" outlinks="pf14186678215000 pf14186678215001 pf14186678215012 pf14186678215014" inlinks="pf14186678215014" path="/Login.xhtml"/>
+  <links id="pf14181153725931" target="pf141811537259315" source="pf14181153725930" outcome="addOwner"/>
+  <links id="pf14181153725938" target="pf14181153725930" source="pf141811537259315" outcome="ok"/>
+  <links id="pf14181153725932" target="pf141811537259316" source="pf14181153725930" outcome="removeOwner"/>
+  <links id="pf14181153725933" target="pf141811537259317" source="pf14181153725930" outcome="addRuralHouse"/>
+  <links id="pf14181153725939" target="pf14181153725930" source="pf141811537259317" outcome="ok"/>
+  <links id="pf14181153725934" target="pf141811537259318" source="pf14181153725930" outcome="removeRuralHouse"/>
+  <links id="pf14181153725935" target="pf141811537259320" source="pf14181153725930" outcome="setAvailability"/>
+  <links id="pf141811537259321" target="pf141811537259322" source="pf141811537259320" outcome="setAvailabilityOriginal"/>
+  <links id="pf141811537259310" target="pf14181153725930" source="pf141811537259322" outcome="ok"/>
+  <links id="pf141811537259311" target="pf14181153725930" source="pf141811537259323" outcome="ok"/>
+  <links id="pf141811537259312" target="pf14181153725930" source="pf141811537259327" outcome="ok"/>
+  <links id="pf141811537259319" target="pf141811537259328" source="pf141811537259318" outcome="removeRuralHouseOriginal"/>
+  <links id="pf141811537259313" target="pf14181153725930" source="pf141811537259328" outcome="ok"/>
+  <links id="pf141811537259314" target="pf14181153725930" source="pf141811537259316" outcome="ok"/>
+  <links id="pf14181153725937" target="pf141811537259329" source="pf14181153725930" outcome="removeSetAvailabilityOne"/>
+  <links id="pf141811537259330" target="pf141811537259331" source="pf141811537259329" outcome="removeSetAvailabilityTwo"/>
+  <links id="pf141811537259324" target="pf141811537259323" source="pf141811537259331" outcome="removeSetAvailabilityThree"/>
+  <links id="pf141811537259326" target="pf141811537259327" source="pf141811537259325" outcome="bookRuralHouse"/>
+  <links id="pf14186678215000" target="pf14181153725930" source="pf14186678215013" outcome="ok"/>
+  <links id="pf14186678215001" target="pf141811537259315" source="pf14186678215013" outcome="registrar"/>
+  <links id="pf14186678215012" target="pf141811537259325" source="pf14186678215013" outcome="queryAvailability"/>
+  <links id="pf14186678215014" target="pf14186678215013" source="pf14186678215013" outcome="error">
+    <bendPoints d1Height="-36" d2Height="-36"/>
+    <bendPoints d1Width="-64" d1Height="-36" d2Width="-64" d2Height="-36"/>
+    <bendPoints d1Width="-64" d2Width="-64"/>
+  </links>
+</pageflow:Pageflow>

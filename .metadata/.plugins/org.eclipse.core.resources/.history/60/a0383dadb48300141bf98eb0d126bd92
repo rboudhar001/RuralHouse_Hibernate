@@ -1,0 +1,387 @@
+package businessLogic;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
+
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
+
+import configuration.Config;
+import dataAccess.DB4oManager;
+import domain.Book;
+import domain.Offer;
+import domain.Owner;
+import domain.RuralHouse;
+import exceptions.OfferCanNotBeBooked;
+
+public class FacadeImplementationOLD extends UnicastRemoteObject implements ApplicationFacadeInterfaceOLD {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	BookManager theBookMngr;
+	
+	
+	public FacadeImplementationOLD() throws RemoteException, InstantiationException,
+			IllegalAccessException, ClassNotFoundException, SQLException {
+		Config c=Config.getInstance();
+		String dataBaseOpenMode=c.getDataBaseOpenMode();
+		DB4oManager.openDatabase(dataBaseOpenMode);
+		theBookMngr = BookManager.getInstance();
+		//dbMngr = DB4oManager.getInstance();
+	}
+
+	/**
+	 * This method obtains owner rural houses 
+	 * 
+	 * @param owner object
+	 *            
+	 * @return a vector of Rural Houses
+	 */
+	public Vector<RuralHouse> getRuralHouses(Owner own) throws RemoteException {
+		
+		if (own == null) {
+			System.out.println("\n\n\n OWNER a NULL \n\n\n");
+		}
+		
+		Vector<RuralHouse> vectorRuralHouse = null;
+		//try {
+
+			List<Owner> result = DB4oManager.getContainer().queryByExample(own);
+			
+			// DESCOMENTAR ESTO ... Comentado porque getRuralHouses() devuelve List<RuralHouse>
+			//vectorRuralHouse = own.getRuralHouses();
+		//}
+		//catch (Exception e) {
+		//	System.out.println("ERROR: FacadeImplementation:addOwner : No se pudo consultar las casas rurales del Owner: " + e.toString());
+		//}
+		
+		return vectorRuralHouse;
+	}
+
+	
+
+	/**
+	 * This method creates an offer with a house number, first day, last day and price
+	 * 
+	 * @param House
+	 *            number, start day, last day and price
+	 * @return None
+	 */
+	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price) throws RemoteException, Exception {
+		ObjectContainer db=DB4oManager.getContainer();
+		
+		RuralHouse proto = new RuralHouse(ruralHouse.getHouseNumber(), null, ruralHouse.getDescription(), ruralHouse.getCity());
+		ObjectSet result = db.queryByExample(proto);
+		 
+		RuralHouse rh = (RuralHouse)result.next();
+		Offer o = rh.createOffer(firstDay, lastDay, price);
+		
+		db.store(o);
+		db.commit(); 
+		return o;
+	}
+
+	/**
+	 * This method creates a book with a corresponding parameters
+	 * 
+	 * @param First
+	 *            day, last day, house number and telephone
+	 * @return a book
+	 */
+	public Book createBook(RuralHouse ruralHouse, Date firstDate, Date lastDate, String bookTelephoneNumber) throws OfferCanNotBeBooked {
+
+		try {
+			ObjectContainer db=DB4oManager.getContainer();
+			
+			RuralHouse proto = new RuralHouse(ruralHouse.getHouseNumber(),null,ruralHouse.getDescription(),ruralHouse.getCity());
+			ObjectSet result = db.queryByExample(proto);
+			
+			RuralHouse rh = (RuralHouse) result.next();
+			Book b = null;
+			
+			Offer offer;
+			offer = rh.findOffer(firstDate, lastDate);
+
+			if (offer != null) {
+				 b = new Book(bookTelephoneNumber, offer);
+				 offer.setBook(b);
+				 
+				 db.store(b);
+				 db.store(offer);
+				 db.commit();
+			}
+			
+			return b;
+			
+		} catch (Exception exc) {
+			exc.printStackTrace();
+			return null;
+		}
+	}
+
+	
+	/**
+	 * This method obtains available offers for a concrete house in a certain period 
+	 * 
+	 * @param houseNumber, the house number where the offers must be obtained 
+	 * @param firstDay, first day in a period range 
+	 * @param lastDay, last day in a period range
+	 * @return a vector of offers(Offer class)  available  in this period
+	 */
+	public Vector<Offer> getOffers(RuralHouse house, Date firstDay, Date lastDay) throws RemoteException, Exception {
+		
+		Vector<Offer> vectorOffer = null;
+		try {
+			RuralHouse rh = new RuralHouse();
+			rh.setCity(house.getCity());
+			rh.setHouseNumber(house.getHouseNumber());
+			
+			List<RuralHouse> result = DB4oManager.getContainer().queryByExample(rh);
+			
+			// DESCOMENTAR ESTO ... Comentado porque getRuralHouses() devuelve getOffers(firstDay, lastDay)
+			//vectorOffer = result.get(0).getOffers(firstDay, lastDay);
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation:addOwner : No se pudo consultar las Ofertas de la RuralHouse: " + e.toString());
+		}
+		
+		return vectorOffer;
+	}
+	
+	/**
+	 * This method existing  owners 
+	 * 
+	 */
+	public Vector<Owner> getOwners() throws RemoteException, Exception {
+		
+		ObjectContainer db = DB4oManager.getContainer();
+
+		 try {
+			 Owner proto = new Owner(null,null,null,null);
+			 
+			 ObjectSet result = db.queryByExample(proto);
+			 Vector<Owner> owners=new Vector<Owner>();
+			 while(result.hasNext())				 
+				 owners.add((Owner)result.next());
+			 return owners;
+	     } finally {
+	         //db.close();
+	     }
+	} 
+	
+	public Vector<RuralHouse> getAllRuralHouses() throws RemoteException,
+	Exception {
+		ObjectContainer db=DB4oManager.getContainer();
+
+		RuralHouse rh;
+		Vector<RuralHouse> ruralHouses = new Vector<RuralHouse>();
+		 try {
+			 RuralHouse proto = new RuralHouse(0,null,null,null);
+			 ObjectSet result = db.queryByExample(proto);
+			 
+			 while( result.hasNext() ) {
+				 
+				 rh = (RuralHouse) result.next();
+				 if ( rh.getOwner() != null ) {
+					 ruralHouses.add(rh);
+				 }
+			 }
+			 
+			 return ruralHouses;
+	     } finally {
+	         //db.close();
+	     }
+	}
+	
+	public void close() throws RemoteException{
+		DB4oManager.close();
+
+	}
+
+	//AÑADIDA
+	public Owner addOwner(Owner own) throws Exception {
+		
+		Owner o = null;
+		try {
+			DB4oManager.getContainer().store(own);
+			DB4oManager.getContainer().commit();
+			
+			o = own;
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation:addOwner : No se pudo añadir al Owner: " + e.toString());
+		}
+		
+		return o;
+	}
+	
+	//AÑADIDA
+	public Owner removeOwner(Owner own) throws Exception {
+		
+		Owner o = null;
+		try {
+			DB4oManager.getContainer().delete(own);
+			DB4oManager.getContainer().commit();
+			
+			o = own;
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation:addOwner : No se pudo eliminar al Owner: " + e.toString());
+		}
+		
+		return o;
+	}
+	
+	//AÑADIDA
+	public RuralHouse addRuralHouse(RuralHouse rh) throws Exception {
+		
+		RuralHouse rHouse = null;
+		try {
+			List<Owner> result = DB4oManager.getContainer().queryByExample(rh.getOwner());
+			result.get(0).addRuralHouse(rh.getHouseNumber(), rh.getDescription(), rh.getCity()); //Añadimos la casa rural
+			
+			DB4oManager.getContainer().store(result.get(0));
+			DB4oManager.getContainer().commit();
+			
+			rHouse = rh;
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation:addRuralHouse : No se pudo añadir la casa rural: " + e.toString());
+		}
+		
+		return rHouse;
+	}
+
+	//AÑADIDA
+	public RuralHouse removeRuralHouse(RuralHouse rh) throws Exception {
+		
+		RuralHouse ruralHouse = null;
+		//try {
+			Owner own = new Owner();
+			own.setLogin(rh.getOwner().getLogin());
+			
+			List<Owner> result_own = DB4oManager.getContainer().queryByExample(own);
+			result_own.get(0).removeRuralHouse(rh); //METODO AÑADIDO
+			
+			
+			RuralHouse rh_aux = new RuralHouse();
+			rh_aux.setHouseNumber(rh.getHouseNumber());
+			rh_aux.setCity(rh.getCity());
+			
+			List<RuralHouse> result_rh = DB4oManager.getContainer().queryByExample(rh_aux);
+			result_rh.get(0).setOwner(null);
+			
+			DB4oManager.getContainer().store(result_rh.get(0));
+			DB4oManager.getContainer().store(result_own.get(0));
+			
+			DB4oManager.getContainer().commit();
+			
+			ruralHouse = rh;
+		//}
+		//catch (Exception e) {
+		//	System.out.println("ERROR: FacadeImplementation:addOwner : No se pudo eliminar la Rural House : " + e.toString());
+		//}
+		
+		return ruralHouse;
+	}
+
+	//AÑADIDA
+	public boolean thisOfferHaveBook(Offer offer) throws Exception {
+		
+		try {
+			Offer o = new Offer();
+			o.setOfferNumber(offer.getOfferNumber());
+		
+			List<Offer> result = DB4oManager.getContainer().queryByExample(o);
+			
+			if (result.get(0).getBook() == null) {
+				return true;
+			}
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation:addOwner : No pudo consultar si la oferta ya esta reservada : " + e.toString());
+		}
+		
+		return false;
+	}
+
+	//AÑADIDA
+	public Offer removeOffer(Offer offer) throws Exception {
+		
+		Offer of = null;
+		try {
+			RuralHouse rh = new RuralHouse();
+			rh.setCity(offer.getRuralHouse().getCity());
+			rh.setHouseNumber(offer.getRuralHouse().getHouseNumber());
+			
+			List<RuralHouse> result = DB4oManager.getContainer().queryByExample(rh);
+			result.get(0).removeOffer(offer);
+			
+			DB4oManager.getContainer().store(result.get(0));
+			DB4oManager.getContainer().commit();
+			
+			of = offer;
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation:addOwner : No se pudo eliminar la oferta : " + e.toString());
+		}
+		
+		return of;
+	}
+	
+	//AÑADIDA
+	public Vector<Offer> getAllOffers(RuralHouse rh) throws Exception {
+		
+		Vector<Offer> vOffer = null;
+		try {
+			RuralHouse rh_aux = new RuralHouse();
+			rh_aux.setCity(rh.getCity());
+			rh_aux.setHouseNumber(rh.getHouseNumber());
+		
+			List<RuralHouse> result = DB4oManager.getContainer().queryByExample(rh_aux);
+			
+			// DESCOMENTAR ESTO ... Comentado porque getRuralHouses() devuelve getAllOffers()
+			//vOffer = result.get(0).getAllOffers();
+		}
+		catch (Exception e) {
+			System.out.println("ERROR: FacadeImplementation:addOwner : No pudo consultar todas las ofertas de la casa rural : " + e.toString());
+		}
+		
+		return vOffer;
+	}
+
+	//AÑADIDA
+	public Book createBook(Offer offer, int phone) throws Exception {
+		
+		Book b = null;
+		Book b_aux = null;
+		try {
+			Offer o = new Offer();
+			o.setOfferNumber(offer.getOfferNumber());
+			
+			b = new Book("" + phone, offer);
+			
+			List<Offer> result = DB4oManager.getContainer().queryByExample(o);
+			result.get(0).setBook(b);
+			
+			DB4oManager.getContainer().store(b);
+			DB4oManager.getContainer().store(offer);
+			DB4oManager.getContainer().commit();
+			 
+			 b_aux = b;
+			 
+		} catch (Exception exc) {
+			exc.printStackTrace();
+			return null;
+		}
+		
+		return b_aux;
+	}
+}
+

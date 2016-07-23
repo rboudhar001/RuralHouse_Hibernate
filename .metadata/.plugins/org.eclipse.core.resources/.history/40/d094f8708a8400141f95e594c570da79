@@ -1,0 +1,19 @@
+package bean;
+
+import domain.Owner;
+
+public class OwnerSingleton {
+	
+	private static Owner owner = null;
+	
+	protected OwnerSingleton() {
+	}
+	
+	public static Owner getOwnerLoged() {
+		return this.owner;
+	}
+	
+	public static void setOwnerLoged(Owner owner) {
+		this.owner = owner;
+	}
+}

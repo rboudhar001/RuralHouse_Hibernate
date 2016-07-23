@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core">
+		
+	<f:view>
+		<head>
+			<title>Añadir Dueño</title>
+		</head>
+
+		<body>
+			<h:form>
+				<h3>Rellene el siguiente formulario ...</h3>
+				
+				<table>
+					<tr>
+						<td>Name: </td>
+						<td><h:inputText id="name" value="#{ownerBean.name}"></h:inputText></td>
+					</tr>
+					
+					<tr>
+						<td>Login: </td>
+						<td><h:inputText id="login" value="#{ownerBean.login}"></h:inputText></td>
+					</tr>
+					
+					<tr>
+						<td>Password: </td>
+						<td><h:inputText id="password" value="#{ownerBean.password}"></h:inputText></td>
+					</tr>
+					
+					<tr>
+						<td>Bank Account: </td>
+						<td><h:inputText id="bankAccount" value="#{ownerBean.bankAccount}"></h:inputText></td>
+					</tr>
+				</table>
+				
+				<p>
+					<h:commandButton value="Add Owner"  action="#{ownerBean.addOwner}"/>
+				</p>
+			</h:form>
+		</body>
+	</f:view>
+</html>

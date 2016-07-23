@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14175096603830" configfile="/RuralHouse_Hibernate/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="Login.xhtml" x="60" y="252" id="pf14186684262265" outlinks="pf14186684262266" path="/Login.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="StartWindow.xhtml" x="228" y="252" id="pf14186684262267" inlinks="pf14186684262266" path="/StartWindow.xhtml"/>
+  <links id="pf14186684262266" target="pf14186684262267" source="pf14186684262265"/>
+</pageflow:Pageflow>

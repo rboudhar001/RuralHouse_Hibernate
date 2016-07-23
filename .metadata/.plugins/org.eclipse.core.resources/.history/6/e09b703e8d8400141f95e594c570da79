@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core">
+		
+<f:view>
+	<head>
+		<title>Eliminar Oferta</title>
+	</head>
+
+	<body>
+		<h:form>
+			<h3>Elija la casa rural para visualizar sus ofertas: </h3>
+			<h:selectOneMenu id="casas" value="#{setAvailabilityBean.ruralHouse}" converter="omnifaces.SelectItemsConverter">
+	            <f:selectItems value="#{setAvailabilityBean.listaRuralHouses}" var="rh" itemLabel="#{rh.toString}" itemValue="#{rh}" />
+	        </h:selectOneMenu>
+	        
+			<br/>
+			<br/>
+			<h:commandButton value="Remove SetAvailability"  action="#{setAvailabilityBean.eliminarOfertaTres}"/>
+		</h:form>
+	</body>
+</f:view>
+</html>

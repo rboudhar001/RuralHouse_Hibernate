@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core"
+		xmlns:p = "http://primefaces.org/ui"
+		>
+
+<f:view>
+	<h:head>
+		<title>Crear Oferta</title>
+	</h:head>
+	
+	<h:body>
+   		<h:form>
+	   		<h3>Rellene el siguiente formulario ...</h3>
+				
+			<table>
+				<h3>Seleccione la casa rural de la cual desea buscar ofertas: </h3>
+				<h:selectOneMenu id="qa-ruralHouse" value="#{queryAndBookBean.ruralHouse}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage=" Error, seleccione una casa rural">
+					<f:selectItem itemLabel="Seleccione una casa rural ... " noSelectionOption="true" />
+					<f:selectItems value="#{queryAndBookBean.listaRuralHouses}" var="rh" itemLabel="#{rh.toString}" itemValue="#{rh}" />
+					<f:validateRequired />
+				</h:selectOneMenu>
+				<h:message for="iterator" style="color:red" />
+			
+				<tr>
+					<td>Seleccione el dia inicial: </td>
+					<td>
+						<p:calendar value="#{queryAndBookBean.firstDayBook}" pattern="dd/MM/yyyy"/>
+					</td>
+				</tr>
+					
+				<tr>
+					<td>Indique el numero de noches: </td>
+					<td>
+						<h:inputText id="night" value="#{queryAndBookBean.night}">
+							 <f:convertNumber integerOnly="true" type="number" />
+							 <f:validateLongRange minimum="1"/>
+						</h:inputText>
+					</td>
+				</tr>
+			</table>
+				
+			<p>
+				<h:commandButton value="Consultar ofertas"  action="#{queryAndBookBean.queryOffer}"/>
+			</p>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

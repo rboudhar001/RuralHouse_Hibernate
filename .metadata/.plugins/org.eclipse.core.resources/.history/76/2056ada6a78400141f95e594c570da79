@@ -1,0 +1,134 @@
+package bean;
+
+import java.util.List;
+
+import businessLogic.ApplicationFacadeInterface;
+import domain.Owner;
+import domain.RuralHouse;
+
+public class RuralHouseBean {
+
+	//LOGICA DE NEGOCIO
+	private ApplicationFacadeInterface facadeJSF;
+	
+	//CONSTRUCTOR
+	public RuralHouseBean() throws Exception {
+		facadeJSF = FacadeSingleton.getInstance();
+	}
+	
+	// RURAL_HOUSE
+	//------------------------------------------------------------------------------------------
+	//Para AddRuralHouse.xhtml
+	//private Owner owner;
+	private String city;
+	private int houseNumber;
+	private String description;
+	
+	//Para RemoveRuralHouse.xhtml
+	private Owner owner = OwnerSingleton.getOwnerLoged();
+	private RuralHouse ruralHouse;
+	
+	//Listas
+	private List<Owner> listaOwners;
+	private List<RuralHouse> listaRuralHouses;
+	//------------------------------------------------------------------------------------------
+	
+	// FUNCIONES : RURAL HOUSE
+	//------------------------------------------------------------------------------------------
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public int getHouseNumber() {
+		return houseNumber;
+	}
+
+	public void setHouseNumber(int houseNumber) {
+		this.houseNumber = houseNumber;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public Owner getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Owner owner) {
+		this.owner = owner;
+	}
+	
+	public RuralHouse getRuralHouse() {
+		return ruralHouse;
+	}
+
+	public void setRuralHouse(RuralHouse ruralHouse) {
+		this.ruralHouse = ruralHouse;
+	}
+	
+	public String addRuralHouse() throws Exception {
+		
+		RuralHouse rh = new RuralHouse(houseNumber, owner, description, city);
+		
+		if ( facadeJSF.addRuralHouse(rh) != null ) {
+			return "ok";
+		}
+		
+		return "error";
+	}
+	
+	//
+	public String removeRuralHouse() throws Exception {
+		
+		/*
+		//Si el owner no tiene casas rurales ... error
+		if (facadeJSF.getRuralHouses(this.owner) != null) {
+			
+			Calendar cal = Calendar.getInstance(); //Obtenemos la fecha actual
+			Date firstDay = new Date (cal.getTimeInMillis());
+			
+			int año = cal.get(Calendar.YEAR) + 100; //Obtenemos el año actual y le sumamos 100 años
+			cal.set(año, 12, 31); //31 de diciembre del año (actual + 100)
+			Date lastDay = new Date (cal.getTimeInMillis());
+			
+			//Si NO existe alguna oferta entre la fecha actual y dentro de 100 años ... eliminamos la casa rural.
+			if (facadeJSF.getOffers(this.ruralHouse, firstDay, lastDay) != null) {
+			
+				if ( facadeJSF.removeRuralHouse(this.ruralHouse) != null) {
+					return "ok";
+				}
+			}
+		}
+		*/
+		
+		this.ruralHouse.setOwner(this.owner);
+		if ( facadeJSF.removeRuralHouse(this.ruralHouse) != null) {
+			return "ok";
+		}
+		
+		return "error";
+	}
+	//------------------------------------------------------------------------------------------
+	
+	// LISTAS DESPLEGABLES
+	//------------------------------------------------------------------------------------------
+	public List<Owner> getListaOwners() throws Exception {
+		listaOwners = facadeJSF.getOwners();
+		return listaOwners;
+	}
+
+	public List<RuralHouse> getListaRuralHouses() throws Exception {
+		listaRuralHouses = facadeJSF.getRuralHouses(this.owner);
+		return listaRuralHouses;
+	}
+	//------------------------------------------------------------------------------------------
+}

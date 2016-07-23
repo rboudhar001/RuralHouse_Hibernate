@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html	xmlns = "http://www.w3.org/1999/xhtml"
+		xmlns:ui = "http://java.sun.com/jsf/facelets"
+		xmlns:h = "http://java.sun.com/jsf/html"
+		xmlns:f = "http://java.sun.com/jsf/core"
+		xmlns:p = "http://primefaces.org/ui"
+		>
+
+<f:view>
+	<h:head>
+		<title>Buscar ofertas de casas rurales</title>
+	</h:head>
+	
+	<h:body>
+   		<h:form>
+			<table>
+				<tr>
+					<td>Seleccione la oferta de la cual desea realizar una reserva: </td>
+					<td>
+				        <h:selectOneMenu id="brh-offer" value="#{queryAndBookBean.offer}" converter="omnifaces.SelectItemsConverter" required="true" requiredMessage=" Error, seleccione una oferta">
+							<f:selectItem itemLabel="Seleccione una casa rural ... " noSelectionOption="true" />
+							<f:selectItems value="#{queryAndBookBean.listaOffers}" var="o" itemLabel="#{o.toString}" itemValue="#{o}" />
+							<f:validateRequired />
+						</h:selectOneMenu>
+						<h:message for="brh-offer" style="color:red" />
+					</td>
+				</tr>
+				
+				<br/>
+				<br/>
+				<tr>
+					<td>Telefono: </td>
+					<td>
+						<h:inputText id="phone" value="#{queryAndBookBean.phone}">
+						    <f:convertNumber integerOnly="true" type="number" />
+						    <f:validateLength minimum="9" maximum="9" />
+						    <f:validateLongRange minimum="0"/>
+						</h:inputText>
+					</td>
+				</tr>
+			</table>
+			
+			<p>
+				<h:commandButton value="Reservar esta oferta"  action="#{queryAndBookBean.bookOffer}"/>
+			</p>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

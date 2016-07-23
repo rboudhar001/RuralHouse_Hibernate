@@ -1,0 +1,151 @@
+package bean;
+
+import java.util.Date;
+import java.util.List;
+
+import businessLogic.ApplicationFacadeInterface;
+import domain.Offer;
+import domain.Owner;
+import domain.RuralHouse;
+
+public class SetAvailabilityBean {
+
+	//LOGICA DE NEGOCIO
+	private ApplicationFacadeInterface facadeJSF;
+	
+	//CONSTRUCTOR
+	public SetAvailabilityBean() throws Exception {
+		facadeJSF = FacadeSingleton.getInstance();
+	}
+	
+	// OFFER
+	//------------------------------------------------------------------------------------------
+	//Para SetAvailability.xhtml
+	private Date firstDay;
+	private Date lastDay;
+	private int price;
+	
+	//Para RemoveSetAvailability.xhtml
+	private Owner owner = OwnerSingleton.getOwnerLoged();
+	private RuralHouse ruralHouse;
+	private Offer offer;
+	
+	//Listas
+	private List<Owner> listaOwners;
+	private List<RuralHouse> listaRuralHouses;
+	private List<Offer> listaOffers;
+	//------------------------------------------------------------------------------------------
+	
+	// FUNCIONES : OFFER
+	//------------------------------------------------------------------------------------------
+	public Date getFirstDay() {
+		return firstDay;
+	}
+
+	public void setFirstDay(Date firstDay) {
+		this.firstDay = firstDay;
+	}
+
+	public Date getLastDay() {
+		return lastDay;
+	}
+
+	public void setLastDay(Date lastDay) {
+		this.lastDay = lastDay;
+	}
+	
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	
+	public Owner getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Owner owner) {
+		this.owner = owner;
+	}
+	
+	public RuralHouse getRuralHouse() {
+		return ruralHouse;
+	}
+
+	public void setRuralHouse(RuralHouse ruralHouse) {
+		this.ruralHouse = ruralHouse;
+	}
+	
+	public Offer getOffer() {
+		return offer;
+	}
+
+	public void setOffer(Offer offer) {
+		this.offer = offer;
+	}
+	
+	public String addOffer() throws Exception {
+		
+		if ( facadeJSF.createOffer(this.ruralHouse, this.firstDay, this.lastDay, this.price) != null ) {
+			return "ok";
+		}
+		
+		return "error";
+	}
+	
+	public String removeOffer() throws Exception {
+		
+		this.offer.setRuralHouse(this.ruralHouse);
+		if ( facadeJSF.thisOfferHaveBook(offer) == true ) {
+			
+			if ( facadeJSF.removeOffer(offer) != null ) {
+				return "ok";
+			}
+		}
+		
+		return "error";
+	}
+	
+	//
+	public String eliminarOfertaDos() {
+		// TODO Auto-generated method stub
+		return "removeSetAvailabilityTwo";
+	}
+	//------------------------------------------------------------------------------------------
+	
+	// LISTAS DESPLEGABLES
+	//------------------------------------------------------------------------------------------
+	public List<Owner> getListaOwners() throws Exception {
+		listaOwners = facadeJSF.getOwners();
+		return listaOwners;
+	}
+
+	public List<RuralHouse> getListaRuralHouses() throws Exception {
+		listaRuralHouses = facadeJSF.getRuralHouses(this.owner);
+		return listaRuralHouses;
+	}
+	
+	public List<Offer> getListaOffers() throws Exception {
+		
+		
+		System.out.println("\nRuralHouse: " + this.ruralHouse + "\n");
+		
+		
+		
+		
+		listaOffers = facadeJSF.getAllOffers(ruralHouse);
+		
+		if (listaOffers.isEmpty()) {
+			System.out.println("\n NULLLL \n");
+		}
+		
+		for (Offer o : listaOffers) {
+			System.out.println("\nOffer: " + o + "\n");
+		}
+		
+		return listaOffers;
+	}
+	//------------------------------------------------------------------------------------------
+}

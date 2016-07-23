@@ -1,0 +1,76 @@
+
+
+package bean;
+
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import modelo.HibernateUtil;
+
+import org.hibernate.Session;
+
+import domain.Owner;
+
+
+
+public class LoginBean {
+	String nombre;
+	String password;
+
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	
+	}
+	
+	public String registrar() {
+		// TODO Auto-generated method stub
+		return "registrar";
+	}
+	
+	//
+	public String consultarOferta() {
+		// TODO Auto-generated method stub
+		return "queryAvailability";
+	}
+
+
+	
+	public String comprobar() {
+		  
+		   Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		   session.beginTransaction();
+		   List result = session.createQuery("from owner").list();
+		   session.getTransaction().commit();
+		   
+		   for (int i = 0; i < result.size(); i++) {
+				Owner us = (Owner) result.get(i);
+				System.out.println("Nombre: " + us.getLogin() + " Password: " + us.getPassword());
+				
+				if(us.getPassword().equals(password))					
+					return "ok";
+				
+		   }
+		   
+				HibernateUtil.getSessionFactory().close();
+			
+		  return "error";
+		   
+		  
+	}
+	
+		
+}
